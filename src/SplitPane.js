@@ -31,7 +31,7 @@ function getDefaultSize(defaultSize, minSize, maxSize, draggedSize) {
 }
 
 function removeNullChildren(children) {
-  return React.Children.toArray(children).filter(c => c);
+  return React.Children.toArray(children).filter((c) => c);
 }
 class SplitPane extends React.Component {
   constructor(props) {
@@ -165,8 +165,11 @@ class SplitPane extends React.Component {
             }
           }
 
-          let newSize = size - sizeDelta;
-          const newPosition = position - positionDelta;
+          const isRTL = this.props.rtl && split == 'vertical';
+          let newSize = isRTL ? size + sizeDelta : size - sizeDelta;
+          const newPosition = isRTL
+            ? position - positionDelta
+            : position + positionDelta;
 
           if (newSize < minSize) {
             newSize = minSize;
@@ -303,7 +306,7 @@ class SplitPane extends React.Component {
     return (
       <div
         className={classes.join(' ')}
-        ref={node => {
+        ref={(node) => {
           this.splitPane = node;
         }}
         style={style}
@@ -311,7 +314,7 @@ class SplitPane extends React.Component {
         <Pane
           className={pane1Classes}
           key="pane1"
-          eleRef={node => {
+          eleRef={(node) => {
             this.pane1 = node;
           }}
           size={pane1Size}
@@ -335,7 +338,7 @@ class SplitPane extends React.Component {
         <Pane
           className={pane2Classes}
           key="pane2"
-          eleRef={node => {
+          eleRef={(node) => {
             this.pane2 = node;
           }}
           size={pane2Size}
@@ -375,6 +378,7 @@ SplitPane.propTypes = {
   pane2Style: stylePropType,
   resizerClassName: PropTypes.string,
   step: PropTypes.number,
+  rtl: PropTypes.bool,
 };
 
 SplitPane.defaultProps = {
